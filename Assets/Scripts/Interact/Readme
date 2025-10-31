@@ -1,0 +1,11 @@
+使用：
+    玩家挂载InteractObjFind以及MainInteractor脚本
+    InteractObjFind需要挂载继承了InteractDetectionSO的脚本生成的配置文件,表示检测的配置,如检测间隔,检测大小
+    还要挂载RectRangeConfigSO脚本生成的配置文件,用于表示检测有效范围
+
+    物体挂载继承了InteractableObject的脚本,实现一些继承了InteractInterfaceBase的各个交互接口
+    玩家交互脚本依次调用各个接口
+
+这个系统的依赖：
+    UI管理器单例：用于实例化交互面板（显示交互UI）
+    主相机： InteractObjFind依赖主相机来改变检测位置

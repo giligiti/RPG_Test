@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Test
+namespace InteractSystem
 {
     public class Main1 : MonoBehaviour
     {
