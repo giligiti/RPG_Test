@@ -1,11 +1,21 @@
 使用：
     玩家挂载InteractObjFind以及MainInteractor脚本
-    InteractObjFind需要挂载继承了InteractDetectionSO的脚本生成的配置文件,表示检测的配置,如检测间隔,检测大小
+    InteractObjFind需要挂载继承了InteractDetectionSO的脚本生成的配置文件,表示检测的配置,如检测间隔,检测范围
     还要挂载RectRangeConfigSO脚本生成的配置文件,用于表示检测有效范围
 
-    物体挂载继承了InteractableObject的脚本,实现一些继承了InteractInterfaceBase的各个交互接口
+    物体挂载继承了InteractableObject的脚本,该脚本需要拖拽赋值交互UI的配置文件，配置文件定义了交互UI是什么样的，以及是如何初始化的
+    实现一些继承了InteractInterfaceBase的各个交互接口
     玩家交互脚本依次调用各个接口
 
+
+
 这个系统的依赖：
+    单例基类：BaseManager，用于快速实现单例
     UI管理器单例：用于实例化交互面板（显示交互UI）
     主相机： InteractObjFind依赖主相机来改变检测位置
+    交互管理器单例：InteractableObject中用于接收可交互物体脚本的注册；
+        管理器提供方法让交互检测脚本（InteractObjFind）获取对应的交互物体脚本
+
+注意事项
+    交互管理器中使用了LRU，他的初始容量是硬编码的（默认100）
+        可以的话应该是根据场景的配置文件来动态设置的，可交互物体有很多的话，应该扩容，很少的话应该缩减

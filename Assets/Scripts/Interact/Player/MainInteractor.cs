@@ -15,7 +15,7 @@ namespace InteractSystem
 
         private InteractObjFind interactObjFind;                    //寻找交互接口的脚本对象
         private InteractInterfaceHandle interfaceHandle;            //当前选中的的交互接口 
-        private InteractorFactory interUIFactory;                   //创建提示UI的对象
+        private InteractorUIManager interUIFactory;                   //创建提示UI的对象
         //玩家是否处于可交互状态
         private bool isInteract = true;
         public bool IsInteract => isInteract;
@@ -56,7 +56,7 @@ namespace InteractSystem
         /// 检测到则触发接口：IOnInteractable(弹出交互UI);ISelectable(选中物体);
         private void ReceiveHandle(InteractInterfaceHandle arg0)
         {
-            Debug.Log("检测到可交互物体");
+            //Debug.Log("主交互获取到有效的可交互物体");
             //如果没有检测到可交互物体
             if (arg0 == null) InteractableExit();
             else InteractableEnter(arg0);
@@ -84,7 +84,7 @@ namespace InteractSystem
         private void InteractableExit()
         {
             //这里interfaceHandle表示的是上一个可交互物体
-            Debug.Log("失去可交互物体");
+            //Debug.Log("失去可交互物体");
             if (interfaceHandle == null) return;
 
             if (interfaceHandle.TryGetInterface<IOnInteractable>(out var itf))

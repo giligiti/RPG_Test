@@ -94,27 +94,7 @@ namespace InteractSystem
             tokenSource.Cancel();
             interactUpdateEvent.RemoveAllListeners();
         }
-        /// <summary>
-        /// 提供检测到的接口对象
-        /// </summary>
-        /// <returns></returns>
-        public InteractInterfaceHandle ProvideInterface() => interfaceInfos.FirstOrDefault();
-        /// <summary>
-        /// 让外界能够进行优先级排序,返回最优先的接口对象
-        /// </summary>
-        /// <param name="action">接收一个交互接口封装的handle对象返回优先级的委托。让方法内部能够根据这个委托获取优先级</param>
-        /// <returns></returns>
-        public InteractInterfaceHandle ProvideInterface(Func<InteractInterfaceHandle,float> action)
-        {
-            priorityQueue.Clear();
-            foreach (var item in interfaceInfos)
-            {
-                if (item == null) continue;
-                priorityQueue.Enqueue(item, action.Invoke(item));
-            }
-            priorityQueue.TryPeek(out InteractInterfaceHandle element, out float priority);
-            return element;
-        }
+
         /// <summary>
         /// 交互检测方法
         /// </summary>
@@ -142,13 +122,14 @@ namespace InteractSystem
                 interfaceInfos.Clear();
                 foreach (var c in interactSO.Detect(transform.position, mainCamera.transform.forward))
                 {
-                    Debug.Log($"检测到可交互层级的物体{c.gameObject.name}");
-                    if (!rangeConfigSO.IsContains(transform.position, transform.forward,c.transform.position))
-                        continue;          // 跳过不符合的
-
-                    var interact = c.GetComponentInParent<InteractableObject>();
-                    Debug.Log($"检测到可交互物体{c.gameObject.name}");
-                    if (interact) interfaceInfos.Add(interact.InterfaceInfo);
+                    //Debug.Log("检测到可交互层级的物体，尝试检测是否符合有效范围");
+                    //判断检测到的可交互物体的最靠近检测范围中心的点是否在有效范围内
+                    if (!rangeConfigSO.IsContains(transform.position, transform.forward, c.ClosestPoint(GetIntectConfigWorldCenter())))
+                        continue;          // 跳过不在配置文件定义的有效范围内的物体
+                    //Debug.Log("检测到有效范围内的物体，尝试获取接口对象");
+                    bool canGet = InteractMgr.Instance.TryGetInteractHandle(c.gameObject, out InteractableObject interactObj);
+                    if (canGet) interfaceInfos.Add(interactObj.InterfaceHandle);
+                    //else Debug.Log("获取接口对象失败");
                 }
                 //如果检测到存在可交互对象
                 if (interfaceInfos.Count != 0)
@@ -169,6 +150,36 @@ namespace InteractSystem
                     itf_interactable = null;
                 }
             }
+        }
+        #region 辅助函数
+        /// <summary>
+        /// 提供检测到的接口对象
+        /// </summary>
+        /// <returns></returns>
+        public InteractInterfaceHandle ProvideInterface() => interfaceInfos.FirstOrDefault();
+        /// <summary>
+        /// 让外界能够进行优先级排序,返回最优先的接口对象
+        /// </summary>
+        /// <param name="action">接收一个交互接口封装的handle对象返回优先级的委托。让方法内部能够根据这个委托获取优先级</param>
+        /// <returns></returns>
+        public InteractInterfaceHandle ProvideInterface(Func<InteractInterfaceHandle, float> action)
+        {
+            priorityQueue.Clear();
+            foreach (var item in interfaceInfos)
+            {
+                if (item == null) continue;
+                priorityQueue.Enqueue(item, action.Invoke(item));
+            }
+            priorityQueue.TryPeek(out InteractInterfaceHandle element, out float priority);
+            return element;
+        }
+        /// <summary>
+        /// 用于得到有效检测范围的此时世界坐标系下的中心
+        /// </summary>
+        /// <returns></returns>
+        Vector3 GetIntectConfigWorldCenter()
+        {
+            return transform.position + Quaternion.LookRotation(transform.forward) * rangeConfigSO.Center;
         }
         void OnDrawGizmos()
         {
@@ -195,6 +206,7 @@ namespace InteractSystem
             GUI.Label(rect1, $"当前选中的: {n}", style);
         }
         
+        #endregion
     }
     
 

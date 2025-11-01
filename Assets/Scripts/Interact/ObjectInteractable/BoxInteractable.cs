@@ -9,7 +9,9 @@ namespace InteractSystem
         private InteractTipSO interactTipSO;
         public bool CanInteract => true;            //暂时设置，用于可以交互
 
-        public InteractTipSO GetInteractConfig() => interactTipSO;
+        
+        public InteractTipSO ProvideConfig() => interactTipSO;
+
         public void OnInteractStart(MainInteractor interactor)
         {
             Debug.Log($"!!!打开了宝箱{gameObject.name}");
@@ -18,7 +20,6 @@ namespace InteractSystem
         {
             Debug.Log($"结束宝箱交互!!!{gameObject.name}");
         }
-        public InteractTipSO ProvideConfig() => interactTipSO;
 
         public void OnSelect()
         {

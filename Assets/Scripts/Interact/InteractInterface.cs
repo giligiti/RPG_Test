@@ -1,47 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-
 namespace InteractSystem
 {
-    /// <summary>
-    /// 可交互对象的封装类
-    /// </summary>
-    public class InteractInterfaceHandle
-    {
-        // 用字典存储“接口类型→实例”，方便查询
-        private Dictionary<Type, IInteractableBase> _interfaces = new Dictionary<Type, IInteractableBase>();
-        public GameObject obj;
-
-        public InteractInterfaceHandle(GameObject gameObject)
-        {
-            // 反射获取物体上所有实现了IInteractableBase的接口
-            obj = gameObject;
-            var components = gameObject.GetComponents<MonoBehaviour>();
-            foreach (var comp in components)
-            {
-                var interfaces = comp.GetType().GetInterfaces()
-                    .Where(t => typeof(IInteractableBase).IsAssignableFrom(t));
-                foreach (var inter in interfaces)
-                {
-                    _interfaces[inter] = (IInteractableBase)comp;
-                }
-            }
-        }
-        
-        
-        public bool TryGetInterface<T>(out T itf) where T : IInteractableBase
-        {
-            if (_interfaces.TryGetValue(typeof(T), out var inter))
-            {
-                itf = (T)inter;
-                return true;
-            }
-            itf = default(T);
-            return false;
-        }
-    }
     /// <summary>
     /// 交互物体接口的基类接口
     /// </summary>

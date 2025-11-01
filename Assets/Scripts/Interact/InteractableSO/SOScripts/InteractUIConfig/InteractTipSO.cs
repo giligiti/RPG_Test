@@ -16,6 +16,10 @@ namespace InteractSystem
         [Header("布局配置")]
         public float posX;
         public float posY;
+        /// <summary>
+        /// 负责实例化，并初始化该配置的预制体
+        /// </summary>
+        /// <returns></returns>
         public abstract GameObject CreatObj();
         public abstract GameObject InitObj(GameObject obj);
 

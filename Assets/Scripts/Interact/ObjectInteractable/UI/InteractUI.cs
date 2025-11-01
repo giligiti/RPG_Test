@@ -7,12 +7,12 @@ namespace InteractSystem
     {
         public void HideUI(Action action = null)
         {
-
+            action?.Invoke();
         }
 
         public void ShowUI(Action action = null)
         {
-
+            action?.Invoke();
         }
     }
 }

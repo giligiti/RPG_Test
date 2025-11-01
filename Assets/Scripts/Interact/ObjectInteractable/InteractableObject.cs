@@ -8,11 +8,13 @@ namespace InteractSystem
     public abstract class InteractableObject : MonoBehaviour
     {
         [SerializeField]
-        protected InteractInterfaceHandle interfaceInfo;
-        public InteractInterfaceHandle InterfaceInfo => interfaceInfo;
+        protected InteractInterfaceHandle interfaceHandle;
+        public InteractInterfaceHandle InterfaceHandle => interfaceHandle;
         protected virtual void Awake()
         {
-            interfaceInfo = new(this.gameObject);
+            interfaceHandle = new(this.gameObject);
+            //把接口对象注册到单例管理器中
+            InteractMgr.Instance.RegisterHandle(this);
         }
     }
 }
