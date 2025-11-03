@@ -9,13 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 959264aa82743684e8b9626fa1222212, type: 3}
-  m_Name: NormalInteractSO
+  m_Script: {fileID: 11500000, guid: f3d2c54a5c90f0247aed17f46bdfdd0c, type: 3}
+  m_Name: InteractUIConfig
   m_EditorClassIdentifier: 
+  uIType: 0
   inputKeyAction: {fileID: 1781555164194001046, guid: 75cdc08f219ead342bc429a56125329c,
     type: 3}
   interactUI: {fileID: 5620285237761963682, guid: 3a30326321f4c124c82bb3492c427755,
     type: 3}
+  imgComponentConfigs:
+  - componentType: 0
+    value: {fileID: -1326815313, guid: 42106227bc274f647bbc9e9886f78ae8, type: 3}
+  - componentType: 1
+    value: {fileID: 2096730224, guid: 7f7e6329f7b7a2548b18f48839305b5e, type: 3}
+  textComponentConfigs:
+  - componentType: 3
+    value: "\u9053\u5177\u7BB1"
   posX: 0
   posY: 0
-  icon_BG: {fileID: 0}

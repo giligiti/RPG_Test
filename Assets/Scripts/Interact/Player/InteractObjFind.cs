@@ -120,16 +120,17 @@ namespace InteractSystem
             {
                 //获取所有检测到的交互脚本，通过其中的属性获取含有物体实现的所有接口的对象
                 interfaceInfos.Clear();
+                Debug.Log(1);
                 foreach (var c in interactSO.Detect(transform.position, mainCamera.transform.forward))
                 {
-                    //Debug.Log("检测到可交互层级的物体，尝试检测是否符合有效范围");
+                    Debug.Log("检测到可交互层级的物体，尝试检测是否符合有效范围");
                     //判断检测到的可交互物体的最靠近检测范围中心的点是否在有效范围内
                     if (!rangeConfigSO.IsContains(transform.position, transform.forward, c.ClosestPoint(GetIntectConfigWorldCenter())))
                         continue;          // 跳过不在配置文件定义的有效范围内的物体
-                    //Debug.Log("检测到有效范围内的物体，尝试获取接口对象");
+                    Debug.Log("检测到有效范围内的物体，尝试获取接口对象");
                     bool canGet = InteractMgr.Instance.TryGetInteractHandle(c.gameObject, out InteractableObject interactObj);
                     if (canGet) interfaceInfos.Add(interactObj.InterfaceHandle);
-                    //else Debug.Log("获取接口对象失败");
+                    else Debug.Log("获取接口对象失败");
                 }
                 //如果检测到存在可交互对象
                 if (interfaceInfos.Count != 0)

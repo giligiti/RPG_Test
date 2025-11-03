@@ -28,8 +28,6 @@ namespace InteractSystem
                     _interfaces[inter] = (IInteractableBase)comp;
                 }
             }
-            //并且提前注册到交互管理器的字典中存储
-            gameObject.GetInstanceID();
         }
         
         

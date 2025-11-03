@@ -1,3 +1,5 @@
+using UnityEngine.UI;
+
 namespace InteractSystem
 {
     /// <summary>
@@ -63,5 +65,13 @@ namespace InteractSystem
         void OnSelect();
         //未选中的时候
         void OnLoseSelect();
+    }
+    /// <summary>
+    /// 交互UI数据互通之间的标准，让交互UI预制体的脚本和配置能够联动，同时具有拓展性
+    /// </summary>
+    /// 这里是使用里氏替换，调用者需要把组件转换成需要的具体组件类型
+    public interface IInteractUIStand
+    {
+        bool TryGetComponent(E_InteractUIComponentType uiType, out MaskableGraphic uiGraphic);
     }
 }

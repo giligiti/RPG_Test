@@ -56,7 +56,7 @@ namespace InteractSystem
         /// 检测到则触发接口：IOnInteractable(弹出交互UI);ISelectable(选中物体);
         private void ReceiveHandle(InteractInterfaceHandle arg0)
         {
-            //Debug.Log("主交互获取到有效的可交互物体");
+            Debug.Log("主交互获取到有效的可交互物体");
             //如果没有检测到可交互物体
             if (arg0 == null) InteractableExit();
             else InteractableEnter(arg0);
