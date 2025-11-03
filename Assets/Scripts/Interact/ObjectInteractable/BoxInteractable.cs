@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace InteractSystem
 {
-    public class BoxInteractable : InteractableObject, IOnInteractStart, ISelectable, IOnInteractable, IOnInteractStop
+    public class BoxInteractable : InteractableObject, IOnInteractStart, ISelectable, IInteractUIable, IOnInteractStop
     {
         [SerializeField]
         private InteractTipSO interactTipSO;

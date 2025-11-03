@@ -69,7 +69,7 @@ namespace InteractSystem
         private void InteractableEnter(InteractInterfaceHandle arg0)
         {
             //根据获取的配置文件展示交互UI（自动处理已经存在的Ui图标的展示逻辑）
-            if (arg0.TryGetInterface<IOnInteractable>(out var itf))
+            if (arg0.TryGetInterface<IInteractUIable>(out var itf))
                 interUIFactory.ShowUI(itf.ProvideConfig());
 
             //进行选中交互
@@ -87,7 +87,7 @@ namespace InteractSystem
             //Debug.Log("失去可交互物体");
             if (interfaceHandle == null) return;
 
-            if (interfaceHandle.TryGetInterface<IOnInteractable>(out var itf))
+            if (interfaceHandle.TryGetInterface<IInteractUIable>(out var itf))
                 interUIFactory.HideUI(itf.ProvideConfig());
 
             if (interfaceHandle.TryGetInterface<ISelectable>(out var selectable))

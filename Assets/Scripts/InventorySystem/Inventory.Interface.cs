@@ -10,8 +10,9 @@ namespace InventorySystem
         /// </summary>
         /// <param name="data">物品数据</param>
         /// <returns>是否存储成功</returns>
-        bool AddItem(ItemData data);
-        bool RemoveItem(ItemData data);
+        bool AddItem(ItemData data, int amount);
+        bool RemoveItem(ItemData data, int amount);
+        System.Collections.Generic.IEnumerable<Item> GetItems();
     }
     /// <summary>
     /// 存储物体的接口（把物体放到背包）
@@ -25,5 +26,10 @@ namespace InventorySystem
         /// <param name="place">物品要存储的地方（玩家背包还是仓库）</param>
         /// <returns>是否存储成功（背包容量满就会失败）</returns>
         bool StorageItem(ItemData data, E_InventoryPlace place);
+    }
+    public interface IItemGrid
+    {
+        bool isMaxStack { get; }
+        bool TryAddItem(ItemData data, int amount);
     }
 }

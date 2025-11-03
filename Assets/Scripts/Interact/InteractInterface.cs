@@ -10,7 +10,7 @@ namespace InteractSystem
     /// <summary>
     /// 会弹出交互UI提示的物体（能被检测到但是尚未开始交互的状态）
     /// </summary>
-    public interface IOnInteractable : IInteractableBase
+    public interface IInteractUIable : IInteractableBase
     {
         /// <summary>
         /// 检查当前交互对象是否可交互（如是否在冷却、是否满足条件）

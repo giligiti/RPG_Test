@@ -1,22 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
+using InteractSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace InventorySystem
 {
-    public class ItemPickup : MonoBehaviour
+    public class ItemPickup : InteractableObject, IInteractUIable, IOnInteractStart, ISelectable
     {
-        // Start is called before the first frame update
-        void Start()
+        public bool CanInteract => throw new System.NotImplementedException();
+        
+        #region ISelectable接口
+        public void OnLoseSelect()
         {
-
+            throw new System.NotImplementedException();
         }
 
-        // Update is called once per frame
-        void Update()
+        public void OnSelect()
         {
-
+            throw new System.NotImplementedException();
         }
+        #endregion
+
+        #region IOnInteractStart接口
+        public void OnInteractStart(MainInteractor interactor)
+        {
+            throw new System.NotImplementedException();
+        }
+        public InteractTipSO ProvideConfig()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool ValidateInput(InputAction.CallbackContext context)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
+        
     }
 
 }

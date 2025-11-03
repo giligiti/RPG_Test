@@ -15,7 +15,6 @@ namespace InventorySystem
         public int maxStack = 1;    //最大堆叠数量，为1说明不可堆叠
         public int price;           //价格
 
-
         public ItemSetting setting; //物品基本属性设置（是否可以丢弃）
 
     }
