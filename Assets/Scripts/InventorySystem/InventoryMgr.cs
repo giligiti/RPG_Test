@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace InventorySystem
 {
@@ -36,7 +35,7 @@ namespace InventorySystem
         /// <param name="amount">物品数量</param>
         /// <param name="place">存储的具体仓库仓库</param>
         /// <returns></returns>
-        public bool TryAddItem(ItemData data, int amount,E_InventoryPlace place)
+        public bool TryAddItem(ItemData data, int amount, E_InventoryPlace place)
         {
             //可以优化（使用共同基础的统一接口），暂时如此，
             switch (place)
@@ -45,7 +44,20 @@ namespace InventorySystem
                     return main.AddItem(data, amount);
                 case E_InventoryPlace.PlayerBag:
                     return self.AddItem(data, amount);
-                default :
+                default:
+                    UnityEngine.Debug.LogWarning("出现未配置的仓库");
+                    return false;
+            }
+        }
+        public bool TryRemoveItem(ItemData data, int amount, E_InventoryPlace place)
+        {
+            switch (place)
+            {
+                case E_InventoryPlace.Inventory:
+                    return main.RemoveItem(data, amount);
+                case E_InventoryPlace.PlayerBag:
+                    return self.RemoveItem(data, amount);
+                default:
                     UnityEngine.Debug.LogWarning("出现未配置的仓库");
                     return false;
             }

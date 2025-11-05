@@ -37,5 +37,10 @@ namespace InventorySystem
         PlayerBag,      //玩家背包
         Inventory,      //仓库
     }
+    public enum E_InventoryUpdateMode
+    {
+        Single,         //更新单个格子
+        Everything,     //更新所有格子
+    }
 
 }

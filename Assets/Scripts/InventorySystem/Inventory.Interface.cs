@@ -30,6 +30,10 @@ namespace InventorySystem
     public interface IItemGrid
     {
         bool isMaxStack { get; }
-        bool TryAddItem(ItemData data, int amount);
+        int Index { get; set; }
+        UnityEngine.GameObject GridSelfObject { get; }
+
+        void UpdateItemData(ItemData data, int amount);
+        void ResetGrid();
     }
 }
