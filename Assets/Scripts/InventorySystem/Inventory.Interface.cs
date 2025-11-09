@@ -1,20 +1,6 @@
 namespace InventorySystem
 {
     /// <summary>
-    /// 可存储物品的仓库接口
-    /// </summary>
-    public interface IInventory
-    {
-        /// <summary>
-        /// 往仓库中添加物品
-        /// </summary>
-        /// <param name="data">物品数据</param>
-        /// <returns>是否存储成功</returns>
-        bool AddItem(ItemData data, int amount);
-        bool RemoveItem(ItemData data, int amount);
-        System.Collections.Generic.IEnumerable<Item> GetItems();
-    }
-    /// <summary>
     /// 存储物体的接口（把物体放到背包）
     /// </summary>
     public interface Inventorable
@@ -29,11 +15,11 @@ namespace InventorySystem
     }
     public interface IItemGrid
     {
-        bool isMaxStack { get; }
         int Index { get; set; }
         UnityEngine.GameObject GridSelfObject { get; }
 
         void UpdateItemData(ItemData data, int amount);
         void ResetGrid();
+        void InjurtInventoryPlace(E_InventoryPlace place);
     }
 }

@@ -1,53 +1,64 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace InventorySystem
 {
-    [RequireComponent(typeof(InventoryGridView))]
-    public class InventoryGrid : MonoBehaviour//, IItemGrid
+    public class InventoryGrid : MonoBehaviour, IItemGrid
     {
+        public Image image;
+        public TextMeshProUGUI textAmount;
         private ItemData itemData;
         private int amount;
-        private InventoryGridView gridView;
+        private int index;
+        private E_InventoryPlace inventoryPlace;
+        public int Index { get => index; set => index = value; }
 
-        public bool isMaxStack => throw new System.NotImplementedException();
-        #region 初始化
-        void Awake()
+        public GameObject GridSelfObject => this.gameObject;
+        private void Awake()
         {
-            gridView = GetComponent<InventoryGridView>();
+            image.enabled = false;
+            textAmount.enabled = false;
         }
-        void OnEnable()
+        
+        #region ItemGrid接口内容
+        public void UpdateItemData(ItemData data, int amount)
         {
-            gridView.ShowUI();
-        }
-        public void DisableItem()
-        {
-            gridView.HideUI(() => this.gameObject.SetActive(false));
-        }
-        #endregion
-        public void Init(ItemData data, int amount)
-        {
+            if (data == null)
+            {
+                amount = 0;
+                itemData = null;
+                SetImageEnable(false);
+                return;
+            }
+            else SetImageEnable(true);
             this.itemData = data;
             this.amount = amount;
+            image.sprite = data.itemIcon;
+            textAmount.text = amount.ToString();
+        }
+        private void SetImageEnable(bool isEnable)
+        {
+            image.enabled = isEnable;
+            textAmount.enabled = isEnable;
+        }
+        public void ResetGrid()
+        {
+            itemData = null;
+            image.sprite = null;
+            image.enabled = false;
+            textAmount.enabled = false;
+            amount = 0;
         }
         /// <summary>
-        /// 尝试添加物品到格子
+        /// 注入格子所代表的仓库
         /// </summary>
-        /// <param name="data">物品数据</param>
-        /// <param name="amount">要添加的物品数量</param>
-        /// <returns>成功添加到这个格子的物品数量</returns>
-        public int TryAddItem(ItemData data, int amount)
-        {
-            //如果不是同种物品或者已满，返回0
-            if (this.itemData.GUID != data.GUID || isMaxStack) return 0;
-            int count = this.amount + amount;
-            if (count > this.itemData.maxStack)
-            {
-                int addNum = this.itemData.maxStack - this.amount;
-                this.amount = this.itemData.maxStack;
-                return addNum;
-            }
-            this.amount += amount;
-            return amount;
-        }
+        /// <param name="place"></param>
+        public void InjurtInventoryPlace(E_InventoryPlace place) => inventoryPlace = place;
+        #endregion
+    
+    
+    
+    
     }
 }

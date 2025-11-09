@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78a97a120788ae149bdb33a5e0ffc9a8, type: 3}
+  m_Name: NewItemData
+  m_EditorClassIdentifier: 
+  GUID: 39155c08-2f8f-46af-84fe-3710d03516e0
+  itemName: sucai
+  itemIcon: {fileID: 1315907100, guid: 42106227bc274f647bbc9e9886f78ae8, type: 3}
+  type: 0
+  descript: "\u4E00\u4E2Atest\u7D20\u6750"
+  prefab: {fileID: 0}
+  maxStack: 5
+  price: 0
+  setting:
+    isUsable: 0
+    isStackable: 0
+    isCombinable: 0
+    isDroppable: 0

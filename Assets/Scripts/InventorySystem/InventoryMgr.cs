@@ -4,64 +4,59 @@ namespace InventorySystem
 {
     public class InventoryMgr : BaseManager<InventoryMgr>
     {
-        private SelfInventory self;
-        private MainInventory main;
+        public Dictionary<E_InventoryPlace, Inventory> InventoryDic;
         public Dictionary<string, ItemData> itemPairs;
+        private Inventory _mainInventory;
+        public Inventory MainInventory 
+        { 
+            get => _mainInventory; 
+            set 
+            { 
+                if (value == null) throw new System.ArgumentNullException("主仓库不能为null");
+                _mainInventory = value;
+                // 后续可添加：主仓库切换事件、日志等
+            } 
+        }
 
         private InventoryMgr()
         {
             //初始化各个存储箱数据
-            this.self = new SelfInventory();
-            this.main = new MainInventory();
             itemPairs = new();
-        }
-        public IInventory GetInventory(E_InventoryPlace place)
-        {
-            switch (place)
+            MainInventory = new Inventory(E_InventoryPlace.Inventory);
+            InventoryDic = new()
             {
-                case E_InventoryPlace.Inventory:
-                    return main;
-                case E_InventoryPlace.PlayerBag:
-                    return self;
-                default:
-                    UnityEngine.Debug.LogWarning("出现未配置的仓库");
-                    return null;
-            }
-        }
-        /// <summary>
-        /// 存储物体
-        /// </summary>
-        /// <param name="data">物品数据</param>
-        /// <param name="amount">物品数量</param>
-        /// <param name="place">存储的具体仓库仓库</param>
-        /// <returns></returns>
-        public bool TryAddItem(ItemData data, int amount, E_InventoryPlace place)
-        {
-            //可以优化（使用共同基础的统一接口），暂时如此，
-            switch (place)
-            {
-                case E_InventoryPlace.Inventory:
-                    return main.AddItem(data, amount);
-                case E_InventoryPlace.PlayerBag:
-                    return self.AddItem(data, amount);
-                default:
-                    UnityEngine.Debug.LogWarning("出现未配置的仓库");
-                    return false;
-            }
-        }
-        public bool TryRemoveItem(ItemData data, int amount, E_InventoryPlace place)
-        {
-            switch (place)
-            {
-                case E_InventoryPlace.Inventory:
-                    return main.RemoveItem(data, amount);
-                case E_InventoryPlace.PlayerBag:
-                    return self.RemoveItem(data, amount);
-                default:
-                    UnityEngine.Debug.LogWarning("出现未配置的仓库");
-                    return false;
-            }
+                { E_InventoryPlace.Inventory, MainInventory }
+            };
         }
 
+        /// <summary>
+        /// 获取对应的仓库对象方法
+        /// </summary>
+        /// <param name="place"></param>
+        /// <returns></returns>
+        public Inventory GetInventory(E_InventoryPlace place)
+        {
+            return InventoryDic.ContainsKey(place) ? InventoryDic[place] : null;
+        }
+
+        #region 主仓库便捷交互方法
+        //这里的添加和删除方法都是操作主仓库的，由于提供了公开的主仓库对象属性，所以以下包装的方法并无必要
+        //仅仅是为了方便外界直接调用而已，只封装了主要常用的添加和删除方法，如果需要调用其他方法，请获取主仓库对象再调用对应方法
+
+        /// <summary>
+        /// 添加方法
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool AddItemToMainInventory(Item item) => MainInventory.AddItem(item);
+        /// <summary>
+        /// 移除物体
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public bool RemoveItemFormMainInventory(Item item) => MainInventory.RemoveItem(item);
+        #endregion
+    
     }
 }

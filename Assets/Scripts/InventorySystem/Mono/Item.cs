@@ -7,9 +7,13 @@ namespace InventorySystem
         public ItemData itemData;
         public int amount = 1;              //数量
         public bool isMaxStack => amount >= itemData.maxStack;
-        public event System.Action onItemAmountChanged;
+        public string Guid => itemData.GUID;
 
-
+        public Item(ItemData itemData)
+        {
+            this.itemData = itemData;
+        }
+        
         /// <summary>
         /// 尝试添加物品
         /// </summary>
@@ -25,31 +29,30 @@ namespace InventorySystem
             {
                 int addNum = this.itemData.maxStack - this.amount;
                 this.amount = this.itemData.maxStack;
-                onItemAmountChanged?.Invoke();
                 return addNum;
             }
             this.amount += amount;
-            onItemAmountChanged?.Invoke();
             return amount;
         }
+
         /// <summary>
         /// 尝试移除物品
         /// </summary>
         /// <param name="amount"></param>
-        /// <returns></returns>
-        public int TryRemoveItem(int amount)
+        /// <returns>实际移除的数量</returns>
+        public int TryRemoveItem(ItemData data, int amount)
         {
+            if (this.itemData.GUID != data.GUID || amount < 0) return 0;
             if (amount >= this.amount)
             {
                 int removeNum = this.amount;
                 this.amount = 0;
-                onItemAmountChanged?.Invoke();
                 return removeNum;
             }
             this.amount -= amount;
-            onItemAmountChanged?.Invoke();
             return amount;
         }
+        
     }
 
 }

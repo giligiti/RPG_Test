@@ -4,10 +4,11 @@ namespace InventorySystem
     [System.Serializable]
     public struct ItemSetting
     {
-        public bool isUsable;
-        public bool isStackable;
-        public bool isCombinable;
-        public bool isDroppable;
+        public bool isUsable;           //是否可以使用
+        public bool isStackable;        //是否可以堆叠
+        public bool isCombinable;       //是否可以调和（其他物体合成这种物体）
+        public bool isDroppable;        //是否可以丢弃
+        public bool isSellable;         //是否可以售卖
     }
     #region 合成系统设置
     [System.Serializable]
