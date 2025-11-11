@@ -3,24 +3,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 //集中在此处处理场景加载相关方法和事件
-public class ScenesLoadMgr : BaseManager<ScenesLoadMgr>
+public class ScenesLoadMgr
 {
     public UnityEvent FrontEvent = new UnityEvent();
     public UnityEvent BackEvent = new UnityEvent();
     public UnityEvent<float> LoadingEvent = new UnityEvent<float>();
     private ScenesLoadMgr()
     {
-
+        Debug.Log("——————创建了ScenesLoadMgr————————");
     }
 
     //提供给外部进行场景加载
     public void LoadScene(string name, UnityAction fun = null)
     {
-        // //按需求添加这个事件中心触发方法
-        // EventCenter.Instance.TriggerEventListener(name);
-        // //加载场景需要清空事件中心
-        // EventCenter.Instance.ClearEventCenter();
-
         FrontEvent?.Invoke();
 
         SceneManager.LoadScene(name);
@@ -29,7 +24,6 @@ public class ScenesLoadMgr : BaseManager<ScenesLoadMgr>
 
         //触发传入的方法
         fun?.Invoke();
-        //RemoveListenerFunction();
     }
     //场景异步加载方法
     public void LoadSceneAsync(string name, UnityAction fun)

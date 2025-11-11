@@ -1,3 +1,4 @@
+using Framework;
 using UnityEngine;
 
 namespace InteractSystem
@@ -14,7 +15,7 @@ namespace InteractSystem
         {
             interfaceHandle = new(this.gameObject);
             //把接口对象注册到单例管理器中
-            InteractMgr.Instance.RegisterHandle(this);
+            GameCore.GetModule<InteractMgr>().RegisterHandle(this);
         }
     }
 }

@@ -1,0 +1,47 @@
+游戏整体框架
+├─ 1. 核心层（框架基石，不涉及业务）
+│  ├─ GameCore（MoM核心，管理者的管理者）：统一入口、模块注册/获取、生命周期调度
+│  ├─ EventBus（事件总线）：模块间解耦通信
+│  └─ IModule（模块接口）：统一所有模块的生命周期（Init/Run/Dispose）
+├─ 2. 基础服务层（通用单例Manager，全游戏复用）
+│  ├─ ResManager（资源管理）：加载/释放预制体、配置表、音效等
+│  ├─ UIManager（UI管理）：面板/小UI的显示、隐藏、对象池
+│  ├─ AudioManager（音效管理）：BGM、音效播放/暂停
+│  ├─ ConfigManager（配置管理）：加载Excel/JSON配置表
+│  ├─ PlayerManager（玩家管理）：玩家数据、状态
+│  ├─ SaveManager（存档管理）：数据存储/读取
+│  └─ ObjectPoolManager（对象池管理）：对象池的创建，物体的存取
+├─ 3. 业务层（游戏玩法逻辑，按功能拆分）
+│  ├─ TaskModule（任务系统）
+│  ├─ CombatModule（战斗系统）
+│  ├─ ShopModule（商店系统）
+│  └─ InventoryModule（背包系统）
+└─ 4. 视图层（UI/表现，依赖服务层）
+   ├─ UIPanel（UI面板基类）
+   ├─ TempUI（临时小UI，如拾取提示）
+   └─ EffectManager（特效管理）
+
+
+
+Scripts/
+├─ Framework/          # 核心复用框架（可直接复制到其他游戏）
+│  ├─ Core/            # 框架核心（必须复用，不可删减）
+│  │  ├─ Manager/      # 核心管理器（GameCore、资源、UI、事件中心等）
+│  │  ├─ Base/         # 基类（IModule接口、单例基类、UI面板基类等）
+│  │  ├─ Interface/    # 核心接口（模块接口、视图接口等，解耦用）
+│  │  └─ Config/       # 框架配置（框架级常量、枚举，如模块优先级、UI层级）
+│  ├─ Modules/         # 可插拔扩展模块（按需删减，如背包、对话系统）
+│  │  ├─ Inventory/    # 背包系统（独立文件夹，内部自包含）
+│  │  ├─ Dialogue/     # 对话系统（独立文件夹）
+│  │  ├─ Task/         # 任务系统（独立文件夹）
+│  │  └─ Quest/        # 成就系统（独立文件夹，示例）
+│  └─ Common/          # 通用工具+基础组件（可复用，全游戏通用）
+│     ├─ DataStructures/ # 自定义数据结构（如循环队列、对象池容器等）
+│     ├─ Tools/        # 通用工具类（计时器、日志、数学工具、字符串工具等）
+│     ├─ Extensions/   # 扩展方法（如List扩展、Vector3扩展等）
+│     └─ Constants/    # 通用常量（如通用枚举、全局常量，非游戏专属）
+└─ Game/               # 当前游戏专属业务（移植框架时直接忽略此文件夹）
+   ├─ Gameplay/        # 游戏玩法逻辑（角色控制、战斗逻辑、场景交互等）
+   ├─ Config/          # 游戏专属配置（如当前游戏的物品配置表、关卡配置等）
+   ├─ UI/              # 游戏专属UI（如当前游戏的主界面、战斗面板等，基于Framework的UI框架）
+   └─ Data/            # 游戏专属数据（如当前游戏的玩家存档数据、关卡数据等）

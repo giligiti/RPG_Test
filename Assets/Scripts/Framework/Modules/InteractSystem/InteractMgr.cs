@@ -1,28 +1,45 @@
-using System;
 using System.Collections.Generic;
+using Framework;
 using ToolSpace;
 using UnityEngine;
 
 namespace InteractSystem
 {
-    public class InteractMgr : BaseManager<InteractMgr>, IDisposable
+    public class InteractMgr : BaseManager<InteractMgr>, IModule
     {
         private readonly Dictionary<int, InteractableObject> objToInteractDic;
         /// <summary>
         /// 子级物体 - 父级物体 的映射
         /// </summary>
         private LRUCache<int, InteractableObject> LRUCache;
-        private InteractMgr()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="capicity">LRU的容量</param>
+        private InteractMgr(int capicity)
         {
             objToInteractDic = new();
-            LRUCache = new(100);
+            LRUCache = new(capicity);
         }
+        #region IModule接口实现 
+        public int Priority => 100;
 
+        public void Init()
+        {
+            Debug.Log("交互框架初始化成功，传入的capicity容量为" + LRUCache.Capacity);
+        }
+        public void Run(float deltaTime)
+        {
+            
+        }
         public void Dispose()
         {
             LRUCache.Clear();
             objToInteractDic.Clear();
         }
+        #endregion
+
+        #region 功能
 
         /// <summary>
         /// 把交互接口对象注册到管理器中，方便查询
@@ -38,8 +55,9 @@ namespace InteractSystem
                 int objInstanceID = interactObj.gameObject.GetInstanceID();
                 objToInteractDic.Add(objInstanceID, interactObj);
             }
-            else UnityEngine.Debug.Log("交互接口对象注册失败");
+            else Debug.Log("交互接口对象注册失败");
         }
+
         /// <summary>
         /// 获取这个物体的交互接口对象
         /// </summary>
@@ -80,6 +98,9 @@ namespace InteractSystem
             }
             return null;
         }
+
+        #endregion
+
     }
 
 }

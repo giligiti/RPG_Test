@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Framework;
 using ToolSpace;
 using UnityEngine;
 using UnityEngine.Events;
@@ -127,7 +128,7 @@ namespace InteractSystem
                     if (!rangeConfigSO.IsContains(transform.position, transform.forward, c.ClosestPoint(GetIntectConfigWorldCenter())))
                         continue;          // 跳过不在配置文件定义的有效范围内的物体
                     //Debug.Log("检测到有效范围内的物体，尝试获取接口对象");
-                    bool canGet = InteractMgr.Instance.TryGetInteractHandle(c.gameObject, out InteractableObject interactObj);
+                    bool canGet = GameCore.GetModule<InteractMgr>().TryGetInteractHandle(c.gameObject, out InteractableObject interactObj);
                     if (canGet) interfaceInfos.Add(interactObj.InterfaceHandle);
                     else Debug.Log("获取接口对象失败");
                 }
