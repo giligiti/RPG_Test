@@ -13,9 +13,9 @@ public class ABMgr : BaseManager<ABMgr>
 
     }
 
-    private AssetBundle mainBundle;             //´æ´¢Ö÷°ü
-    private AssetBundleManifest manifest;       //´æ´¢Ö÷°üµÄÒÀÀµ¹ØÏµ
-    //Á÷ÎÄ¼şµØÖ·×Ö·û´®
+    private AssetBundle mainBundle;             //å­˜å‚¨ä¸»åŒ…
+    private AssetBundleManifest manifest;       //å­˜å‚¨ä¸»åŒ…çš„ä¾èµ–å…³ç³»
+    //æµæ–‡ä»¶åœ°å€å­—ç¬¦ä¸²
     private string streamingPath
     {
         get
@@ -23,7 +23,7 @@ public class ABMgr : BaseManager<ABMgr>
             return Application.streamingAssetsPath + "/";
         }
     }
-    //Ö÷°üÃû
+    //ä¸»åŒ…å
     private string MainBundleName
     {
         get
@@ -49,35 +49,35 @@ public class ABMgr : BaseManager<ABMgr>
         {
             Debug.Log("nono");
         }
-        string[] bundles = manifest.GetAllDependencies(abName);//¸ù¾İ´«ÈëµÄÃû×ÖµÃµ½°üµÄÒÀÀµ°üµÄÃû×Ö
+        string[] bundles = manifest.GetAllDependencies(abName);//æ ¹æ®ä¼ å…¥çš„åå­—å¾—åˆ°åŒ…çš„ä¾èµ–åŒ…çš„åå­—
         AssetBundle build;
-        //¼ÓÔØËùÓĞÒÀÀµ°ü
+        //åŠ è½½æ‰€æœ‰ä¾èµ–åŒ…
         for (int i = 0; i < bundles.Length; i++)
         {
-            //ÅĞ¶ÏÊÇ·ñ¼ÓÔØ¹ı
+            //åˆ¤æ–­æ˜¯å¦åŠ è½½è¿‡
             if (abDic.ContainsKey(bundles[i]))
                 continue;
             build = AssetBundle.LoadFromFile(streamingPath + bundles[i]);
-            abDic.Add(bundles[i], build);//´æ´¢
+            abDic.Add(bundles[i], build);//å­˜å‚¨
 
         }
 
-        //¼ÓÔØ°ü
-        if (!abDic.ContainsKey(abName))//ÅĞ¶ÏÊÇ·ñ¼ÓÔØ¹ı
+        //åŠ è½½åŒ…
+        if (!abDic.ContainsKey(abName))//åˆ¤æ–­æ˜¯å¦åŠ è½½è¿‡
         {
             build = AssetBundle.LoadFromFile(abName);
             abDic.Add(abName, build);
         }
     }
-    #region Í¬²½¼ÓÔØ
-    //Ö¸¶¨ÀàĞÍ·½·¨
+    #region åŒæ­¥åŠ è½½
+    //æŒ‡å®šç±»å‹æ–¹æ³•
     public Object LoadRes(string abName, string resName,Type types)
     {
         LoadBundle(abName);
         Object obj = abDic[abName].LoadAsset(resName , types);
         return obj;
     }
-    //·ºĞÍ·½·¨
+    //æ³›å‹æ–¹æ³•
     public T LoadRes<T>(string abName, string resName) where T : Object
     {
         LoadBundle(abName);
@@ -87,49 +87,49 @@ public class ABMgr : BaseManager<ABMgr>
 
     #endregion
 
-    #region Òì²½¼ÓÔØ
-    //Òì²½¼ÓÔØ´«Èëab°üÃû£¬×ÊÔ´Ãû£¬ÀàĞÍÃû£¬»Øµ÷ÊÂ¼ş
+    #region å¼‚æ­¥åŠ è½½
+    //å¼‚æ­¥åŠ è½½ä¼ å…¥abåŒ…åï¼Œèµ„æºåï¼Œç±»å‹åï¼Œå›è°ƒäº‹ä»¶
     public void LoadResAsync(string abName, string resName, Type types, UnityAction<Object> events = null)
     {
         MonoMgr.Instance.StartCoroutine(RealLoadRes(abName, resName, types, events));
     }
-    //·ºĞÍÒì²½
+    //æ³›å‹å¼‚æ­¥
     public void LoadResAsync<T>(string abName, string resName, UnityAction<T> events = null)where T : Object
     {
         MonoMgr.Instance.StartCoroutine(RealLoadRes<T>(abName, resName, events));
     }
-    //Ğ­³Ì
+    //åç¨‹
     private IEnumerator RealLoadRes(string name, string resName, Type type, UnityAction<Object> events = null)
     {
         LoadBundle(name);
         AssetBundleRequest abq = abDic[name].LoadAssetAsync(resName,type);
         yield return abq;
-        //µ÷ÓÃ»Øµ÷
+        //è°ƒç”¨å›è°ƒ
         events?.Invoke(abq.asset);
     }
-    //·ºĞÍĞ­³Ì
+    //æ³›å‹åç¨‹
     private IEnumerator RealLoadRes<T>(string name, string resName, UnityAction<T> events = null) where T : Object
     {
         LoadBundle(name);
         AssetBundleRequest abq = abDic[name].LoadAssetAsync<T>(resName);
         yield return abq;
-        //µ÷ÓÃ»Øµ÷
+        //è°ƒç”¨å›è°ƒ
         T b = abq.asset as T;
         events?.Invoke(b);
     }
     #endregion
 
-    #region ×ÊÔ´°üĞ¶ÔØ
-    //Ğ¶ÔØµ¥¸ö°ü
+    #region èµ„æºåŒ…å¸è½½
+    //å¸è½½å•ä¸ªåŒ…
     public void UnloadPack(string name)
     {
         if (!abDic.ContainsKey(name))
             return;
-        abDic[name].Unload(false);//Ğ¶ÔØ
-        abDic.Remove(name);//ÔÚ×ÖµäÖĞÒÆ³ı
+        abDic[name].Unload(false);//å¸è½½
+        abDic.Remove(name);//åœ¨å­—å…¸ä¸­ç§»é™¤
     }
 
-    //Ğ¶ÔØËùÓĞ°ü
+    //å¸è½½æ‰€æœ‰åŒ…
     public void UnloadAllPack(string name)
     {
         AssetBundle.UnloadAllAssetBundles(false);

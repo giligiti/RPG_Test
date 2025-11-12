@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TurretPoolData : PoolData
 {
-    //炮塔的实例化方法
+    //鐐鐨勫疄渚嬪寲鏂规硶
     protected override GameObject ObjectInstante(string key, string path = null)
     {
         key = path == null ? "Turret/" + key : path;
