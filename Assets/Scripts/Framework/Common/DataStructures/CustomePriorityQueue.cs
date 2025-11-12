@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,7 +16,7 @@ namespace ToolSpace
         TryPeek 尝试查看顶部
         AsList 返回排序后的队列
     */
-    public class CustomePriorityQueue<TElement, TPriority> where TPriority : IComparable<TPriority>
+    public class CustomePriorityQueue<TElement, TPriority> : IEnumerable<TElement> where TPriority : IComparable<TPriority>
     {
         public CustomePriorityQueue()
         {
@@ -148,7 +149,7 @@ namespace ToolSpace
         public List<TElement> AsList(List<TElement> list)
         {
             list.Clear();
-            foreach(var item in heapList)
+            foreach (var item in heapList)
             {
                 list.AddRange(heapList.Select(element => element.Element));
             }
@@ -215,6 +216,20 @@ namespace ToolSpace
         {
             (heapList[a], heapList[b]) = (heapList[b], heapList[a]);
         }
+
+
+        #region 迭代器接口实现
+        public IEnumerator<TElement> GetEnumerator()
+        {
+            foreach (var item in heapList)
+                yield return item.Element;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        #endregion
     }
     public struct PriorityNode<TElement, TPriority>
     {
@@ -226,4 +241,5 @@ namespace ToolSpace
             this.Priority = priority;
         }
     }
+
 }

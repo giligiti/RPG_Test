@@ -28,9 +28,20 @@ namespace Framework
 
         static Dictionary<Type, IModule> d_ModlueDic = new Dictionary<Type, IModule>();
         static List<IModule> l_moduleList = new List<IModule>();   //根据优先度排序后的列表
-        
+
+        #region 核心字段
+
+        /// <summary>
+        /// 交互管理器
+        /// </summary>
+        /// <typeparam name="InteractMgr"></typeparam>
+        /// <returns></returns>
+        public static InteractMgr InteractMgr => GetModule<InteractMgr>();
+
+
         #endregion
 
+        #endregion
         #region 初始化
         void Awake()
         {

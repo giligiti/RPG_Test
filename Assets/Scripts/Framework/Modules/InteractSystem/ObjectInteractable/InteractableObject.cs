@@ -15,7 +15,7 @@ namespace InteractSystem
         {
             interfaceHandle = new(this.gameObject);
             //把接口对象注册到单例管理器中
-            GameCore.GetModule<InteractMgr>().RegisterHandle(this);
+            GameCore.InteractMgr.RegisterHandle(this);
         }
     }
 }
