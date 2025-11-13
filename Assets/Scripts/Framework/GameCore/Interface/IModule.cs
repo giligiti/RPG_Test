@@ -14,7 +14,8 @@ namespace Framework
         /// 帧更新               
         /// </summary>
         /// <param name="deltaTime">帧间隔时间</param>
-        void Run(float deltaTime);
+        void Run(float deltaTime) { }
+
         /// <summary>
         /// 销毁释放（游戏结束的时候）
         /// </summary>

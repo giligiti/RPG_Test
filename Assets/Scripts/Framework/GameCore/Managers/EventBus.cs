@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace Framework
+namespace Framework.Event
 {
     /// <summary>
     /// 管理整个项目大部分的事件触发逻辑（非线程安全）
     /// </summary>
     public class EventBus : IModule
     {
+        public int EventCount => eventDic.Count;
         private static int idDistributor = 0;
         //监听者容器
         Dictionary<Type, List<(int,IEventHandle)>> eventDic;
@@ -74,7 +75,7 @@ namespace Framework
         {
             Type t = typeof(T);
             //如果字典中有这个事件类型
-            if (eventDic.TryGetValue(t,out var handleList))
+            if (eventDic.TryGetValue(t, out var handleList))
             {
                 //遍历监听者列表，寻找id对应的对象
                 for (int i = handleList.Count - 1; i >= 0; i--)

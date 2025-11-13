@@ -13,6 +13,12 @@ namespace InteractSystem
         public InteractInterfaceHandle InterfaceHandle => interfaceHandle;
         protected virtual void Awake()
         {
+            // interfaceHandle = new(this.gameObject);
+            // //把接口对象注册到单例管理器中
+            // GameCore.InteractMgr.RegisterHandle(this);
+        }
+        protected virtual void Start()
+        {
             interfaceHandle = new(this.gameObject);
             //把接口对象注册到单例管理器中
             GameCore.InteractMgr.RegisterHandle(this);

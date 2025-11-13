@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 
-namespace ToolSpace
+namespace Framework.ToolSpace
 {
     /// <summary>
     /// LRU缓存：自动淘汰最近最少使用的项目
@@ -17,6 +18,8 @@ namespace ToolSpace
         // 访问顺序：最近访问的在头部，最久未访问的在尾部
         private readonly LinkedList<CacheItem> _accessList;
 
+        private readonly PoolQuene<CacheItem> itemPool;
+        public event Action<K, V> eliminateEvent;
         /// <summary>
         /// 当前缓存数量
         /// </summary>
@@ -27,13 +30,29 @@ namespace ToolSpace
         /// </summary>
         public int Capacity => _capacity;
 
+        #region 缓存项CacheItem
+
         /// <summary>
         /// 缓存项
         /// </summary>
-        private class CacheItem
+        private class CacheItem : IReset
         {
-            public K Key { get; }
-            public V Value { get; }
+            public K Key { get; private set; }
+            public V Value { get; private set; }
+
+            public CacheItem() { }
+            public CacheItem Init(K key, V value)
+            {
+                Key = key;
+                Value = value;
+                return this;
+            }
+
+            public void ResetSelf()
+            {
+                Key = default;
+                Value = default;
+            }
 
             public CacheItem(K key, V value)
             {
@@ -42,13 +61,17 @@ namespace ToolSpace
             }
         }
 
+        #endregion
+
         public LRUCache(int capacity)
         {
             _capacity = capacity;
             _map = new Dictionary<K, LinkedListNode<CacheItem>>(capacity);
             _accessList = new LinkedList<CacheItem>();
         }
-
+        
+        #region 公开操作方法
+        public bool ConstainKey(K key) => _map.ContainsKey(key);
         /// <summary>
         /// 尝试从缓存获取值
         /// </summary>
@@ -77,7 +100,9 @@ namespace ToolSpace
             {
                 // 键已存在：更新值并移到头部
                 _accessList.Remove(existingNode);
-                existingNode.Value = new CacheItem(key, value);
+                CacheItem cacheItem = itemPool.GetValue();
+                cacheItem.Init(key, value);
+                existingNode.Value = cacheItem;
                 _accessList.AddFirst(existingNode);
             }
             else
@@ -90,12 +115,29 @@ namespace ToolSpace
                 }
 
                 // 添加新节点到头部
-                var newNode = new LinkedListNode<CacheItem>(new CacheItem(key, value));
+                var newNode = new LinkedListNode<CacheItem>(itemPool.GetValue().Init(key, value));
                 _accessList.AddFirst(newNode);
                 _map[key] = newNode;
             }
         }
-
+        /// <summary>
+        /// 移除特定的物体，同时不会改变排序
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool RemoveWithoutChangeSort(K key, out V value)
+        {
+            if (_map.ContainsKey(key))
+            {
+                _accessList.Remove(_map[key]);
+                value = _map[key].Value.Value;
+                _map.Remove(key);
+                return true;
+            }
+            value = default;
+            return false;
+        }
+        #endregion
         /// <summary>
         /// 移除最久未使用的项目
         /// </summary>
@@ -105,6 +147,7 @@ namespace ToolSpace
             if (lastNode != null)
             {
                 _map.Remove(lastNode.Value.Key);
+                itemPool.ReturnBack(lastNode.Value);
                 _accessList.RemoveLast();
             }
         }
@@ -118,4 +161,5 @@ namespace ToolSpace
             _accessList.Clear();
         }
     }
+    
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ToolSpace
+namespace Framework.ToolSpace
 {
     //默认最小堆
     /*优先队列提供方法：

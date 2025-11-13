@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Framework.Event;
+using Framework.Pool;
+using Framework.Resources;
 using InteractSystem;
 using UnityEngine;
 
@@ -46,8 +49,7 @@ namespace Framework
         /// <typeparam name="InteractMgr"></typeparam>
         /// <returns></returns>
         public static InteractMgr InteractMgr => GetModule<InteractMgr>();
-
-
+        public static PoolManager PoolManager => GetModule<PoolManager>();
 
         #endregion
 
@@ -65,7 +67,9 @@ namespace Framework
         }
         void InitFramework()
         {
-            RegisterModule<Test2>();
+            RegisterModule<EventBus>();
+            RegisterModule<ResManager>();
+            RegisterModule<PoolManager>();
             RegisterModule<InteractMgr>(100);
             l_moduleList = d_ModlueDic.Values.OrderBy(t => t.Priority).ToList();
             foreach (var item in l_moduleList)

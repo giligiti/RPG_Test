@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Framework;
-using ToolSpace;
+using Framework.ToolSpace;
 using UnityEngine;
 
 namespace InteractSystem
